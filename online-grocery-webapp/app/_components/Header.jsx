@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { LayoutGrid, Search, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,8 +11,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import GlobalApi from '../_utils/GlobalApi';
 
 function Header() {
+  const [categoryList, setCategoryList] = useState([]);
+  useEffect(() => {
+    getCategoryList();
+  }, []);
+  const getCategoryList = () => {
+    GlobalApi.getCategory.then((resp) => {
+      console.log(resp?.data?.data);
+      setCategoryList(resp.data.data);
+      console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
+    });
+  };
   return (
     <div className="p-5 shadow-sm flex justify-between">
       <div className="flex items-center gap-8">
@@ -27,10 +40,21 @@ function Header() {
           <DropdownMenuContent>
             <DropdownMenuLabel>Browse Category</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
+            {categoryList.map((ctList) => (
+              <DropdownMenuItem className="flex gap-2 items-center cursor-pointer">
+                <Image
+                  src={
+                    process.env.NEXT_PUBLIC_BACKEND_URL +
+                    ctList?.attributes?.icon?.data[0]?.attributes?.url
+                  }
+                  alt="image"
+                  width={22}
+                  height={22}
+                  unoptimized={true}
+                />
+                <h2 className="text-large">{ctList?.attributes?.name}</h2>
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
 
