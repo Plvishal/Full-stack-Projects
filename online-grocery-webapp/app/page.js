@@ -14,6 +14,13 @@ export default async function Home() {
       <Slider sliderList={sliderList} />
       <CategoryList categoryList={categoryList} />
       <ProductList productList={productList} />
+      <Image
+        src="/banner.png"
+        width={400}
+        height={300}
+        alt="bannner"
+        className="w-full h-[400px] object-contain"
+      />
     </div>
   );
 }
