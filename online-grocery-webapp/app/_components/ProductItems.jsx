@@ -1,6 +1,15 @@
 import Image from 'next/image';
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import ProductItemDetails from './ProductItemDetails';
 
 function ProductItems({ product }) {
   return (
@@ -31,12 +40,23 @@ function ProductItems({ product }) {
         </h2>
       </div>
 
-      <Button
-        variant="outline"
-        className="text-primary font-semibold hover:text-white hover:bg-green-400 transitio-all  ease-in-out"
-      >
-        Add to card
-      </Button>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button
+            variant="outline"
+            className="text-primary font-semibold hover:text-white hover:bg-green-400 transitio-all  ease-in-out"
+          >
+            Add to card
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogDescription>
+              <ProductItemDetails product={product} />
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
