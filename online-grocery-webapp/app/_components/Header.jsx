@@ -19,10 +19,8 @@ function Header() {
     getCategoryList();
   }, []);
   const getCategoryList = () => {
-    GlobalApi.getCategory.then((resp) => {
-      console.log(resp?.data?.data);
+    GlobalApi.getCategory().then((resp) => {
       setCategoryList(resp.data.data);
-      console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
     });
   };
   return (
