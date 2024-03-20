@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
   CircleUserRound,
@@ -19,6 +19,7 @@ import {
 import GlobalApi from '../_utils/GlobalApi';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { UpdateCartContext } from '../_context/UpdateCartContext';
 
 function Header() {
   const [categoryList, setCategoryList] = useState([]);
@@ -26,6 +27,7 @@ function Header() {
   const user = JSON.parse(sessionStorage.getItem('user'));
   const jwt = sessionStorage.getItem('jwt');
   const [totalCartItem, setTotalCartItem] = useState(0);
+  const { updateCart, setUpdateCart } = useContext(UpdateCartContext);
   useEffect(() => {
     getCategoryList();
   }, []);
@@ -37,7 +39,7 @@ function Header() {
   };
   useEffect(() => {
     getCartItems();
-  }, []);
+  }, [updateCart]);
   const onSignOut = () => {
     sessionStorage.clear();
     router.push('/sign-in');
