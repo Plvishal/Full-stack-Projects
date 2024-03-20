@@ -1,7 +1,12 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { CircleUserRound, LayoutGrid, Search, ShoppingBag } from 'lucide-react';
+import {
+  CircleUserRound,
+  LayoutGrid,
+  Search,
+  ShoppingBasket,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -18,6 +23,9 @@ import { useRouter } from 'next/navigation';
 function Header() {
   const [categoryList, setCategoryList] = useState([]);
   const isLoggedIn = sessionStorage.getItem('jwt') ? true : false;
+  const user = JSON.parse(sessionStorage.getItem('user'));
+  const jwt = sessionStorage.getItem('jwt');
+  const [totalCartItem, setTotalCartItem] = useState(0);
   useEffect(() => {
     getCategoryList();
   }, []);
@@ -27,9 +35,17 @@ function Header() {
       setCategoryList(resp.data.data);
     });
   };
+  useEffect(() => {
+    getCartItems();
+  }, []);
   const onSignOut = () => {
     sessionStorage.clear();
     router.push('/sign-in');
+  };
+  const getCartItems = async () => {
+    const cartItemList = await GlobalApi.getCartItems(user.id, jwt);
+
+    setTotalCartItem(cartItemList?.length);
   };
   return (
     <div className="p-5 shadow-sm flex justify-between">
@@ -76,7 +92,10 @@ function Header() {
       </div>
       <div className="flex gap-5 items-center">
         <h2 className="flex gap-2 items-center font-large">
-          <ShoppingBag /> 0
+          <ShoppingBasket className="h-7 w-7" />
+          <span className="bg-green-500 text-white px-2 rounded-full">
+            {totalCartItem}
+          </span>
         </h2>
         {!isLoggedIn ? (
           <Link href={'/sign-in'}>
