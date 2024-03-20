@@ -16,6 +16,7 @@ import Link from 'next/link';
 
 function Header() {
   const [categoryList, setCategoryList] = useState([]);
+  const isLoggedIn = sessionStorage.getItem('jwt') ? true : false;
   useEffect(() => {
     getCategoryList();
   }, []);
@@ -39,8 +40,11 @@ function Header() {
           <DropdownMenuContent>
             <DropdownMenuLabel>Browse Category</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {categoryList.map((ctList) => (
-              <Link href={'/products-category/' + ctList.attributes.name}>
+            {categoryList.map((ctList, i) => (
+              <Link
+                key={i}
+                href={'/products-category/' + ctList.attributes.name}
+              >
                 <DropdownMenuItem className="flex gap-2 items-center cursor-pointer">
                   <Image
                     src={
@@ -68,7 +72,11 @@ function Header() {
         <h2 className="flex gap-2 items-center font-large">
           <ShoppingBag /> 0
         </h2>
-        <Button>Login</Button>
+        {!isLoggedIn && (
+          <Link href={'/sign-in'}>
+            <Button>Login</Button>
+          </Link>
+        )}
       </div>
     </div>
   );
