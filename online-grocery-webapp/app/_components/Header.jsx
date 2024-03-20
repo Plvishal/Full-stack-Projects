@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { LayoutGrid, Search, ShoppingBag } from 'lucide-react';
+import { CircleUserRound, LayoutGrid, Search, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import GlobalApi from '../_utils/GlobalApi';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 function Header() {
   const [categoryList, setCategoryList] = useState([]);
@@ -20,10 +21,15 @@ function Header() {
   useEffect(() => {
     getCategoryList();
   }, []);
+  const router = useRouter();
   const getCategoryList = () => {
     GlobalApi.getCategory().then((resp) => {
       setCategoryList(resp.data.data);
     });
+  };
+  const onSignOut = () => {
+    sessionStorage.clear();
+    router.push('/sign-in');
   };
   return (
     <div className="p-5 shadow-sm flex justify-between">
@@ -72,10 +78,25 @@ function Header() {
         <h2 className="flex gap-2 items-center font-large">
           <ShoppingBag /> 0
         </h2>
-        {!isLoggedIn && (
+        {!isLoggedIn ? (
           <Link href={'/sign-in'}>
             <Button>Login</Button>
           </Link>
+        ) : (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <CircleUserRound className="w-7 h-7 bg-green-900 rounded-full text-white cursor-pointer" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem>My Order</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onSignOut()}>
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
       </div>
     </div>
