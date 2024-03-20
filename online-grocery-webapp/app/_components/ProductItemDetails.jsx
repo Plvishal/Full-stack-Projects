@@ -1,16 +1,52 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { ShoppingBasket } from 'lucide-react';
+import { LoaderCircle, ShoppingBasket } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import GlobalApi from '../_utils/GlobalApi';
+import { toast } from 'sonner';
 
 function ProductItemDetails({ product }) {
+  const jwt = sessionStorage.getItem('jwt');
+  const user = JSON.parse(sessionStorage.getItem('user'));
   const [productTotalPrice, setProductTotalPrice] = useState(
     product.attributes.sellingPricce
       ? product.attributes.sellingPricce
       : product.attributes.mrp
   );
+  const [loader, setLoader] = useState();
   let [quantity, setQuantity] = useState(1);
+
+  const router = useRouter();
+  const addToCart = () => {
+    setLoader(true);
+    if (!jwt) {
+      router.push('/sign-in');
+      setLoader(false);
+      return;
+    }
+    const data = {
+      data: {
+        quantity: quantity,
+        amount: (quantity * productTotalPrice).toFixed(2),
+        products: product.id,
+        users_permissions_users: user.id,
+      },
+    };
+    GlobalApi.addToCart(data, jwt).then(
+      (resp) => {
+        console.log(resp.data);
+        toast('Added to cart');
+        setLoader(false);
+      },
+      (e) => {
+        console.log(e);
+        toast('Error while adding cart');
+        setLoader(false);
+      }
+    );
+  };
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 p-7 bg-white text-black">
       <Image
@@ -60,9 +96,17 @@ function ProductItemDetails({ product }) {
               </div>
               <h2>={quantity * productTotalPrice}</h2>
             </div>
-            <Button className="flex items-center gap-3 bg-green-600">
+            <Button
+              className="flex items-center gap-3 bg-green-600"
+              onClick={() => addToCart()}
+              disabled={loader}
+            >
               <ShoppingBasket />
-              Add To Cart
+              {loader ? (
+                <LoaderCircle className="animate-spin" />
+              ) : (
+                ' Add To Cart'
+              )}
             </Button>
           </div>
           <h2 className="mt-2">
