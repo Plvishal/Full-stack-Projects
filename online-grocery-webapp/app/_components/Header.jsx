@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import GlobalApi from '../_utils/GlobalApi';
+import Link from 'next/link';
 
 function Header() {
   const [categoryList, setCategoryList] = useState([]);
@@ -39,19 +40,21 @@ function Header() {
             <DropdownMenuLabel>Browse Category</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {categoryList.map((ctList) => (
-              <DropdownMenuItem className="flex gap-2 items-center cursor-pointer">
-                <Image
-                  src={
-                    process.env.NEXT_PUBLIC_BACKEND_URL +
-                    ctList?.attributes?.icon?.data[0]?.attributes?.url
-                  }
-                  alt="image"
-                  width={22}
-                  height={22}
-                  unoptimized={true}
-                />
-                <h2 className="text-large">{ctList?.attributes?.name}</h2>
-              </DropdownMenuItem>
+              <Link href={'/products-category/' + ctList.attributes.name}>
+                <DropdownMenuItem className="flex gap-2 items-center cursor-pointer">
+                  <Image
+                    src={
+                      process.env.NEXT_PUBLIC_BACKEND_URL +
+                      ctList?.attributes?.icon?.data[0]?.attributes?.url
+                    }
+                    alt="image"
+                    width={22}
+                    height={22}
+                    unoptimized={true}
+                  />
+                  <h2 className="text-large">{ctList?.attributes?.name}</h2>
+                </DropdownMenuItem>
+              </Link>
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
