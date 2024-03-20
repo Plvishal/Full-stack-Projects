@@ -29,7 +29,7 @@ function CreateAccount() {
         router.push('/');
       },
       (e) => {
-        toast('Error while creating account');
+        toast(e?.response?.data?.error?.message);
       }
     );
   };

@@ -29,7 +29,7 @@ function SignIn() {
       },
       (e) => {
         console.log(e);
-        toast('Error while login ');
+        toast(e?.response?.data?.error?.message);
       }
     );
   };
