@@ -7,12 +7,13 @@ import Link from 'next/link';
 import GlobalApi from '@/app/_utils/GlobalApi';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-
+import { LoaderIcon } from 'lucide-react';
 function CreateAccount() {
   const [username, setUserName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const router = useRouter();
+  const [loader, setLoader] = useState();
   useEffect(() => {
     const jwt = sessionStorage.getItem('jwt');
     if (jwt) {
@@ -21,15 +22,18 @@ function CreateAccount() {
     }
   }, []);
   const onCreateAccount = () => {
+    setLoader(true);
     GlobalApi.registerUser(username, email, password).then(
       (resp) => {
         sessionStorage.setItem('user', JSON.stringify(resp.data.user));
         sessionStorage.setItem('jwt', resp.data.jwt);
         toast('Account created successfully');
         router.push('/');
+        setLoader(false);
       },
       (e) => {
         toast(e?.response?.data?.error?.message);
+        setLoader(false);
       }
     );
   };
@@ -60,7 +64,11 @@ function CreateAccount() {
             onClick={() => onCreateAccount()}
             disabled={!(username || email || password)}
           >
-            Create an Account
+            {loader ? (
+              <LoaderIcon className="animate-spin" />
+            ) : (
+              'Create an  Acoount'
+            )}
           </Button>
           <p>
             Already have a account &nbsp;
