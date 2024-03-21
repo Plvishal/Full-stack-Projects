@@ -30,6 +30,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { UpdateCartContext } from '../_context/UpdateCartContext';
 import CartItemList from './CartItemList';
+import { toast } from 'sonner';
 
 function Header() {
   const [categoryList, setCategoryList] = useState([]);
@@ -60,6 +61,12 @@ function Header() {
     console.log(cartItemList_);
     setTotalCartItem(cartItemList_?.length);
     setCartItemList(cartItemList_);
+  };
+  const onDeleteItem = (id) => {
+    GlobalApi.deleteCartItem(id, jwt).then((resp) => {
+      toast('Item removed from the cart');
+      getCartItems();
+    });
   };
   return (
     <div className="p-5 shadow-sm flex justify-between">
@@ -121,7 +128,10 @@ function Header() {
                 My Cart
               </SheetTitle>
               <SheetDescription>
-                <CartItemList cartItemList={cartItemList} />
+                <CartItemList
+                  cartItemList={cartItemList}
+                  onDeleteItem={onDeleteItem}
+                />
               </SheetDescription>
             </SheetHeader>
           </SheetContent>
