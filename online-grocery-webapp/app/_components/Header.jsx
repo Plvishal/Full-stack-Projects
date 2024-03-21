@@ -29,6 +29,7 @@ import GlobalApi from '../_utils/GlobalApi';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { UpdateCartContext } from '../_context/UpdateCartContext';
+import CartItemList from './CartItemList';
 
 function Header() {
   const [categoryList, setCategoryList] = useState([]);
@@ -120,8 +121,7 @@ function Header() {
                 My Cart
               </SheetTitle>
               <SheetDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
+                <CartItemList cartItemList={cartItemList} />
               </SheetDescription>
             </SheetHeader>
           </SheetContent>
