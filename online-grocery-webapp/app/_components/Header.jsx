@@ -16,6 +16,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+
 import GlobalApi from '../_utils/GlobalApi';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -28,6 +37,7 @@ function Header() {
   const jwt = sessionStorage.getItem('jwt');
   const [totalCartItem, setTotalCartItem] = useState(0);
   const { updateCart, setUpdateCart } = useContext(UpdateCartContext);
+  const [cartItemList, setCartItemList] = useState([]);
   useEffect(() => {
     getCategoryList();
   }, []);
@@ -45,9 +55,10 @@ function Header() {
     router.push('/sign-in');
   };
   const getCartItems = async () => {
-    const cartItemList = await GlobalApi.getCartItems(user.id, jwt);
-
-    setTotalCartItem(cartItemList?.length);
+    const cartItemList_ = await GlobalApi.getCartItems(user.id, jwt);
+    console.log(cartItemList_);
+    setTotalCartItem(cartItemList_?.length);
+    setCartItemList(cartItemList_);
   };
   return (
     <div className="p-5 shadow-sm flex justify-between">
@@ -93,12 +104,29 @@ function Header() {
         </div>
       </div>
       <div className="flex gap-5 items-center">
-        <h2 className="flex gap-2 items-center font-large">
-          <ShoppingBasket className="h-7 w-7" />
-          <span className="bg-green-500 text-white px-2 rounded-full">
-            {totalCartItem}
-          </span>
-        </h2>
+        <Sheet>
+          <SheetTrigger>
+            {' '}
+            <h2 className="flex gap-2 items-center font-large">
+              <ShoppingBasket className="h-7 w-7" />
+              <span className="bg-green-500 text-white px-2 rounded-full">
+                {totalCartItem}
+              </span>
+            </h2>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle className="bg-green-500 text-white font-bold text-lg p-2 mt-10 rounded-xl text-center">
+                My Cart
+              </SheetTitle>
+              <SheetDescription>
+                This action cannot be undone. This will permanently delete your
+                account and remove your data from our servers.
+              </SheetDescription>
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
+
         {!isLoggedIn ? (
           <Link href={'/sign-in'}>
             <Button>Login</Button>
