@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -68,6 +69,14 @@ function Header() {
       getCartItems();
     });
   };
+  const [subTotal, setSubTotal] = useState(0);
+  useEffect(() => {
+    let total = 0;
+    cartItemList.forEach((element) => {
+      total = total + element.amount;
+    });
+    setSubTotal(total);
+  }, [cartItemList]);
   return (
     <div className="p-5 shadow-sm flex justify-between">
       <div className="flex items-center gap-8">
@@ -114,7 +123,6 @@ function Header() {
       <div className="flex gap-5 items-center">
         <Sheet>
           <SheetTrigger>
-            {' '}
             <h2 className="flex gap-2 items-center font-large">
               <ShoppingBasket className="h-7 w-7" />
               <span className="bg-green-500 text-white px-2 rounded-full">
@@ -134,6 +142,18 @@ function Header() {
                 />
               </SheetDescription>
             </SheetHeader>
+            <SheetClose asChild>
+              <div className="absolute w-[90%] bottom-6 flex flex-col">
+                <h2 className="text-lg font-bold flex justify-between">
+                  Subtotal <span>&#8377;{subTotal}</span>
+                </h2>
+                <Button
+                  onClick={() => router.push(jwt ? '/checkout' : '/sign-in')}
+                >
+                  Checkout
+                </Button>
+              </div>
+            </SheetClose>
           </SheetContent>
         </Sheet>
 
