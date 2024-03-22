@@ -74,6 +74,12 @@ const deleteCartItem = (id, jwt) =>
       Authorization: 'Bearer ' + jwt,
     },
   });
+const createOrder = (data, jwt) =>
+  axiosClient.post('/orders', data, {
+    headers: {
+      Authorization: 'Bearer ' + jwt,
+    },
+  });
 
 export default {
   getCategory,
@@ -86,4 +92,5 @@ export default {
   addToCart,
   getCartItems,
   deleteCartItem,
+  createOrder,
 };

@@ -2,14 +2,15 @@
   "collectionName": "components_ordered_item_ordered_items",
   "info": {
     "displayName": "Ordered-Item",
-    "icon": "car"
+    "icon": "car",
+    "description": ""
   },
   "options": {},
   "attributes": {
-    "quanatity": {
+    "quantity": {
       "type": "integer"
     },
-    "price": {
+    "amount": {
       "type": "integer"
     },
     "product": {

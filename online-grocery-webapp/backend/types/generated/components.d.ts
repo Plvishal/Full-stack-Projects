@@ -5,10 +5,11 @@ export interface OrderedItemOrderedItem extends Schema.Component {
   info: {
     displayName: 'Ordered-Item';
     icon: 'car';
+    description: '';
   };
   attributes: {
-    quanatity: Attribute.Integer;
-    price: Attribute.Integer;
+    quantity: Attribute.Integer;
+    amount: Attribute.Integer;
     product: Attribute.Relation<
       'ordered-item.ordered-item',
       'oneToOne',

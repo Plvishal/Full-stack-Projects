@@ -1,20 +1,28 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import GlobalApi from '@/app/_utils/GlobalApi';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PayPalButtons } from '@paypal/react-paypal-js';
 import { ArrowBigRight } from 'lucide-react';
-import GlobalApi from '@/app/_utils/GlobalApi';
 import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+
 function Checkout() {
   const user = JSON.parse(sessionStorage.getItem('user'));
   const jwt = sessionStorage.getItem('jwt');
   const [totalCartItem, setTotalCartItem] = useState(0);
   const [cartItemList, setCartItemList] = useState([]);
+  const [subtotal, setSubTotal] = useState(0);
+
   const [username, setUsername] = useState();
   const [email, setEmail] = useState();
   const [phone, setPhone] = useState();
   const [zip, setZip] = useState();
   const [address, setAddress] = useState();
+
+  const [totalAmount, setTotalAmount] = useState(0);
+
   const router = useRouter();
   useEffect(() => {
     if (!jwt) {
@@ -22,23 +30,57 @@ function Checkout() {
     }
     getCartItems();
   }, []);
+
+  /**
+   * Used to get Total Cart Item
+   */
   const getCartItems = async () => {
     const cartItemList_ = await GlobalApi.getCartItems(user.id, jwt);
     console.log(cartItemList_);
     setTotalCartItem(cartItemList_?.length);
     setCartItemList(cartItemList_);
   };
-  const [subTotal, setSubTotal] = useState(0);
+
   useEffect(() => {
     let total = 0;
     cartItemList.forEach((element) => {
       total = total + element.amount;
     });
-    setSubTotal(total);
+    setTotalAmount((total * 0.9 + 15).toFixed(2));
+    setSubTotal(total.toFixed(2));
   }, [cartItemList]);
-  const calculateTotalAmmount = () => {
-    const totalAmount = subTotal * 0.9 + 15;
+
+  const calculateTotalAmount = () => {
+    const totalAmount = subtotal * 0.9 + 15;
+
     return totalAmount.toFixed(2);
+  };
+
+  const onApprove = (data) => {
+    const id = data.paymentId;
+    const payload = {
+      data: {
+        paymentId: id.toString(),
+        totalOrderAmount: totalAmount,
+        username: username,
+        email: email,
+        phone: phone,
+        zip: zip,
+        address: address,
+        orderItemList: cartItemList,
+        userId: user.id,
+      },
+    };
+    console.log(payload);
+
+    GlobalApi.createOrder(payload, jwt).then((resp) => {
+      toast('Order Places Successfully!');
+      cartItemList.forEach((item, index) => {
+        console.log(item.id);
+        GlobalApi.deleteCartItem(item.id, jwt).then((resp) => {});
+      });
+      router.replace('/order-confirmation');
+    });
   };
   return (
     <div className="">
@@ -50,7 +92,7 @@ function Checkout() {
           <h2 className="font-bold text-3xl">Billing Details</h2>
           <div className="grid grid-cols-2 gap-10 mt-3">
             <Input
-              placeholder="Username"
+              placeholder="Name"
               onChange={(e) => setUsername(e.target.value)}
             />
             <Input
@@ -74,26 +116,46 @@ function Checkout() {
         </div>
         <div className="mx-10 border">
           <h2 className="p-3 bg-gray-200 font-bold text-center">
-            Total Cart :{totalCartItem}
+            Total Cart ({totalCartItem})
           </h2>
           <div className="p-4 flex flex-col gap-4">
             <h2 className="font-bold flex justify-between">
-              Subtotal : <span>&#8377;{subTotal}</span>
+              Subtotal : <span>&#x20b9;{subtotal}</span>
             </h2>
             <hr></hr>
             <h2 className="flex justify-between">
-              Delivery : <span>&#8377;15.0</span>
+              Delivery : <span>&#x20b9;15.00</span>
             </h2>
             <h2 className="flex justify-between">
-              Tax (9%) :<span>{(totalCartItem * 0.9).toFixed(2)}</span>
+              Tax (9%) : <span>&#x20b9;{(totalCartItem * 0.9).toFixed(2)}</span>
             </h2>
             <hr></hr>
             <h2 className="font-bold flex justify-between">
-              Total :<span>&#8377;{calculateTotalAmmount()}</span>
+              Total : <span>&#x20b9;{calculateTotalAmount()}</span>
             </h2>
-            <Button>
-              Payment <ArrowBigRight />
+            <Button onClick={() => onApprove({ paymentId: 123 })}>
+              Pa/yment <ArrowBigRight />{' '}
             </Button>
+
+            {totalAmount > 15 && (
+              <PayPalButtons
+                disabled={!(username && email && address && zip)}
+                style={{ layout: 'horizontal' }}
+                onApprove={onApprove}
+                createOrder={(data, actions) => {
+                  return actions.order.create({
+                    purchase_units: [
+                      {
+                        amount: {
+                          value: totalAmount, // Pass the amount here
+                          currency_code: 'USD', // Change currency code if needed
+                        },
+                      },
+                    ],
+                  });
+                }}
+              />
+            )}
           </div>
         </div>
       </div>
