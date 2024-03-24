@@ -37,6 +37,7 @@ function Header() {
   const [categoryList, setCategoryList] = useState([]);
   const isLoggedIn = sessionStorage.getItem('jwt') ? true : false;
   const user = JSON.parse(sessionStorage.getItem('user'));
+
   const jwt = sessionStorage.getItem('jwt');
   const [totalCartItem, setTotalCartItem] = useState(0);
   const { updateCart, setUpdateCart } = useContext(UpdateCartContext);
@@ -59,7 +60,6 @@ function Header() {
   };
   const getCartItems = async () => {
     const cartItemList_ = await GlobalApi.getCartItems(user.id, jwt);
-    console.log(cartItemList_);
     setTotalCartItem(cartItemList_?.length);
     setCartItemList(cartItemList_);
   };
@@ -170,7 +170,9 @@ function Header() {
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>My Order</DropdownMenuItem>
+              <Link href={'/my-order'}>
+                <DropdownMenuItem>My Order</DropdownMenuItem>
+              </Link>
               <DropdownMenuItem onClick={() => onSignOut()}>
                 Logout
               </DropdownMenuItem>
