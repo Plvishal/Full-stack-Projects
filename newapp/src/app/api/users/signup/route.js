@@ -11,6 +11,11 @@ export async function POST(req, res) {
     if (user) {
       return NextResponse.json({ msg: 'user already exist' }, { status: 400 });
     }
+    // bcryptjs salt generation
+    const salt = await bcryptjs.genSalt(10);
+    const hashedPassword = await bcryptjs.hash(password, salt);
+    console.log(hashedPassword);
+    return NextResponse.json({ hashedPassword });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
