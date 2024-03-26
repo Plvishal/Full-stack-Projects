@@ -1,4 +1,4 @@
-import connectMongo from '@/config/db';
+import { connectMongo } from '@/config/db';
 import User from '@/modules/userSchema';
 
 import { NextRequest, NextResponse } from 'next/server';
