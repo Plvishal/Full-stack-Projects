@@ -15,6 +15,13 @@ export async function POST(req, res) {
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(password, salt);
     console.log(hashedPassword);
+
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+    });
+    const savedUser = await newUser.save();
     return NextResponse.json({ hashedPassword });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
