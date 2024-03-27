@@ -2,6 +2,8 @@ import { connectMongo } from '@/config/db';
 import User from '@/modules/userSchema';
 import { NextRequest, NextResponse } from 'next/server';
 import bcryptjs from 'bcryptjs';
+import { sendEmail } from '@/utils/mailer';
+
 connectMongo();
 export async function POST(req, res) {
   try {
@@ -14,7 +16,6 @@ export async function POST(req, res) {
     // bcryptjs salt generation
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(password, salt);
-    console.log(hashedPassword);
 
     const newUser = new User({
       username,
@@ -22,7 +23,13 @@ export async function POST(req, res) {
       password: hashedPassword,
     });
     const savedUser = await newUser.save();
-    return NextResponse.json({ hashedPassword });
+    // send a verification email
+    await sendEmail({ email, emailType: 'VERIFY ', userId: savedUser._id });
+    return NextResponse.json({
+      msg: 'User register successfulyy',
+      success: true,
+      savedUser,
+    });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
