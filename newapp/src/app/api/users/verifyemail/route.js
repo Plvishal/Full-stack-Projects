@@ -4,10 +4,13 @@ import { NextRequest, NextResponse } from 'next/server';
 
 connectMongo();
 
-export async function POST(req) {
+export async function GET(req) {
   try {
-    const reqBody = await req.json();
-    const { token } = reqBody;
+    // const reqBody = await req.json();
+    // console.log(reqBody);
+    // const { token } = reqBody;
+    const searchParams = req.nextUrl.searchParams;
+    const token = searchParams.get('token');
     const user = await User.findOne({
       verifyToken: token,
       verifyTokenExpiry: { $gt: Date.now() },
