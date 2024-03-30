@@ -66,7 +66,6 @@ function Sabout() {
               href={'/vishal.pdf'}
               target="_blank"
               rel="noopener noreferrer"
-              locale={false}
               download
               className="flex justify-center items-cente "
             >
