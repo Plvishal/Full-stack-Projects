@@ -9,7 +9,8 @@ export default function Home() {
         <div className="md:w-[23%]  p-2 md:h-[500px] bg-white md:sticky  relative left-0 md:top-32 top-32 border-2 border-red-900 rounded-xl shadow-2xl">
           <Sabout />
         </div>
-        <div className="md:w-[65%]  bg-white  md:order-none order-last border-2 border-red-900 rounded-xl p-9 relative md:top-12  top-32">
+        <div className="md:w-[65%]  bg-white  md:order-none order-last border-2 border-red-900 rounded-xl p-9 relative md:mt-12 mt-32">
+          {/* <div className="relative"> */}
           <p>2</p>
           <p>fdeahfuihreaiua;ishogw</p>
           <p>fdeahfuihreaiua;ishogw</p>
@@ -114,6 +115,7 @@ export default function Home() {
           <p>fdeahfuihreaiua;ishogw</p>
           <p>fdeahfuihreaiua;ishogw</p>
           <p>fdeahfuihreaiua;ishogw</p>
+          {/* </div> */}
         </div>
         <div className="md:w-[10%] w-full md:h-[500px] p-2 md:bg-white bg-blue-700 md:sticky fixed right-0 md:top-32 top-2  border-blue-900 rounded-xl md:order-none order-first z-40">
           3
