@@ -1,9 +1,10 @@
 import React from 'react';
 import { BackgroundBeams } from '@/components/ui/background-beams';
 import { about, whatido } from '@/utils/aboutData';
+import Resume from '../resume/page';
 export default function About() {
   return (
-    <div className="h-[30rem] w-full rounded-md bg-neutral-950 relative flex flex-col antialiased p-5 text-white">
+    <div className="h-full w-full rounded-md bg-neutral-950 relative flex flex-col antialiased p-5 text-white">
       {about.map((ab, i) => (
         <div key={i}>
           <h1 className="text-2xl font-bold font-serif bg-clip-text text-transparent bg-gradient-to-b from-slate-200 via-slate-300 to-slate-400">
@@ -28,7 +29,11 @@ export default function About() {
           </div>
         ))}
       </div>
+
       <BackgroundBeams />
+      <div className="mt-10">
+        <Resume />
+      </div>
     </div>
   );
 }
