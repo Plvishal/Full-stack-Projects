@@ -1,6 +1,5 @@
 import { BackgroundBeams } from '@/components/ui/background-beams';
 import { HoverEffect } from '@/components/ui/card-hover-effect';
-import { ResumeContainer } from '@/components/ui/moving-border';
 import { certi } from '@/utils';
 import { projects, technicalsSkills } from '@/utils/resumeData';
 import Image from 'next/image';
@@ -10,14 +9,11 @@ function Resume() {
   return (
     <div className=" w-full rounded-md bg-neutral-950 relative flex flex-col antialiased p-5 text-white">
       <div className="flex justify-center items-center">
-        <ResumeContainer
-          borderRadius="1.75rem"
-          className="bg-black dark:bg-slate-900 dark:text-white border-neutral-200 dark:border-slate-800 border-1 text-white shadow-lg"
-        >
-          <h1 className="text-xl font-bold font-serif bg-clip-text text-transparent bg-gradient-to-b from-red-300 via-pink-400 to-blue-400">
+        <div className="bg-neutral-700/[0.9]  p-3 rounded-2xl">
+          <h1 className="text-xl font-bold font-serif bg-clip-text text-transparent bg-gradient-to-b from-red-300 via-pink-400 to-blue-400 hover:cursor-pointer">
             Resume
           </h1>
-        </ResumeContainer>
+        </div>
       </div>
       <div className="mt-6">
         <h1 className="text-2xl font-bold font-serif bg-clip-text text-transparent bg-gradient-to-b from-slate-200 via-slate-300 to-slate-400">

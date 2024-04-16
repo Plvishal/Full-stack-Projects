@@ -1,8 +1,7 @@
 import React from 'react';
-import { BackgroundBeams } from '@/components/ui/background-beams';
 import { about, whatido } from '@/utils/aboutData';
 import Resume from '../resume/page';
-import ProjectMain from '../project/page';
+import Project from '@/components/Project';
 export default function About() {
   return (
     <div className="h-full w-full rounded-md bg-neutral-950 relative flex flex-col antialiased p-5 text-white">
@@ -30,13 +29,9 @@ export default function About() {
           </div>
         ))}
       </div>
-
-      <BackgroundBeams />
       <div className="mt-10">
         <Resume />
-      </div>
-      <div>
-        <ProjectMain />
+        <Project />
       </div>
     </div>
   );
