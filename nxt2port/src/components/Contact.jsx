@@ -32,6 +32,7 @@ function ContactForm() {
           prefix="Firstname"
           field="firstname"
           errors={state.errors}
+          className="text-white font-sans font-normal"
         />
         <Input
           id="lastname"
@@ -43,11 +44,17 @@ function ContactForm() {
           prefix="Lastname"
           field="lastname"
           errors={state.errors}
+          className="text-white font-sans font-normal mt-1"
         />
       </div>
       <div>
         <Input id="email" type="email" name="email" placeholder="Email ID" />
-        <ValidationError prefix="Email" field="email" errors={state.errors} />
+        <ValidationError
+          prefix="Email"
+          field="email"
+          errors={state.errors}
+          className="text-white font-sans font-normal mt-1"
+        />
       </div>
       <div>
         <Input
@@ -56,7 +63,12 @@ function ContactForm() {
           name="phone"
           placeholder="phone number"
         />
-        <ValidationError prefix="Phone" field="phone" errors={state.errors} />
+        <ValidationError
+          prefix="Phone"
+          field="phone"
+          errors={state.errors}
+          className="text-white font-sans font-normal mt-1"
+        />
       </div>
       <div>
         <Textarea
@@ -68,6 +80,7 @@ function ContactForm() {
           prefix="Message"
           field="message"
           errors={state.errors}
+          className="text-white font-sans font-normal mt-1"
         />
       </div>
       <div className="flex justify-end items-end">
